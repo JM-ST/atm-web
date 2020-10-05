@@ -1,0 +1,53 @@
+<!DOCTYPE HTML>
+<html xmlns:layout="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{fragments/master}"
+      xmlns:th="https://www.thymeleaf.org">
+
+<div layout:fragment="content">
+    <div class="container">
+        <div class="jumbotron">
+            <h3>OpenBankAccount</h3>
+            <form class="mt-3" th:action="@{/bankaccount}" method="POST">
+                <div class="form-group">
+                    <label for="inputId">ID</label>
+                    <input class="form-control" type="text" name="id" id="inputId">
+                </div>
+                <div class="form-group">
+                    <label for="inputCustomerID">CustomerID</label>
+                    <input class="form-control" type="text" name="customerId" id="inputCustomerID">
+                </div>
+                <div class="form-group">
+                    <label for="inputType">Type</label>
+                    <input class="form-control" type="text" name="type" id="inputType">
+                </div>
+                <div class="form-group">
+                    <label for="inputBalance">Balance</label>
+                    <input class="form-control" type="input" name="balance" id="inputBalance">
+                </div>
+                <button type="submit" class="btn btn-secondary">Submit</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="container mt-5">
+        <h2 class="jumbotron">All BankAccount</h2>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>CustomerID</th>
+                <th>Type</th>
+                <th>Balance</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="bankAccount : ${allBankAccounts}">
+                <td th:text="${bankAccount.id}"></td>
+                <td th:text="${bankAccount.customerId}"></td>
+                <td th:text="${bankAccount.type}"></td>
+                <td th:text="${bankAccount.balance}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
