@@ -1,30 +1,47 @@
 package th.ac.ku.atmweb.Service;
 
 import org.mindrot.jbcrypt.BCrypt;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import th.ac.ku.atmweb.Model.Customer;
+import th.ac.ku.atmweb.data.CustomerRepository;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class CustomerService {
 
-    private ArrayList<Customer> customerArrayList ;
+//    private ArrayList<Customer> customerArrayList ;
 
-    @PostConstruct
-    public void postConstruct(){
-        this.customerArrayList = new ArrayList<>();
+    private CustomerRepository customerRepository ;
+
+    public CustomerService(CustomerRepository repository){
+        this.customerRepository = repository;
     }
+
+
+//    public void postConstruct(){
+//        this.customerArrayList = new ArrayList<>();
+//    }
 
     public void createCustomer(Customer customer){
         String hashPIN = hash(customer.getPin());
         customer.setPin(hashPIN);
-        customerArrayList.add(customer);
+        customerRepository.save(customer);
     }
 
-    public ArrayList<Customer> getCustomerArrayList() {
-        return new ArrayList<>(this.customerArrayList);
+    public Customer findCustomer(int id) {
+       try{
+           return customerRepository.findById(id);
+       }catch (EmptyResultDataAccessException e){
+           return null ;
+       }
+    }
+
+        public List<Customer> getCustomerArrayList() {
+        return customerRepository.findAll();
     }
 
     private String hash(String pin) {
@@ -32,13 +49,6 @@ public class CustomerService {
         return BCrypt.hashpw(pin, salt);
     }
 
-    public Customer findCustomer(int id) {
-        for (Customer customer : customerArrayList) {
-            if (customer.getId() == id)
-                return customer;
-        }
-        return null;
-    }
     public Customer checkPin(Customer inputCustomer) {
         Customer storedCustomer = findCustomer(inputCustomer.getId());
 
@@ -48,7 +58,6 @@ public class CustomerService {
             if (BCrypt.checkpw(inputCustomer.getPin(), hashPin))
                 return storedCustomer;
         }
-
         return null;
     }
 
