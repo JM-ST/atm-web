@@ -1,7 +1,13 @@
 package th.ac.ku.atmweb.Model;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
+@Entity
 public class Customer {
+    @Id
     private int id  ;
+
     private String name, pin ;
 
     public Customer(int id, String name, String pin) {
@@ -9,6 +15,8 @@ public class Customer {
         this.name = name;
         this.pin = pin;
     }
+
+    public Customer() { }
 
     public int getId() {
         return id;

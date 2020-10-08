@@ -1,24 +1,22 @@
 package th.ac.ku.atmweb.Service;
 
 import org.mindrot.jbcrypt.BCrypt;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import th.ac.ku.atmweb.Model.Customer;
 import th.ac.ku.atmweb.data.CustomerRepository;
 
-import javax.annotation.PostConstruct;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class CustomerService {
 
 //    private ArrayList<Customer> customerArrayList ;
 
-    private CustomerRepository customerRepository ;
+    private CustomerRepository repository;
 
     public CustomerService(CustomerRepository repository){
-        this.customerRepository = repository;
+        this.repository = repository;
     }
 
 
@@ -29,19 +27,19 @@ public class CustomerService {
     public void createCustomer(Customer customer){
         String hashPIN = hash(customer.getPin());
         customer.setPin(hashPIN);
-        customerRepository.save(customer);
+        repository.save(customer);
     }
 
     public Customer findCustomer(int id) {
        try{
-           return customerRepository.findById(id);
-       }catch (EmptyResultDataAccessException e){
+           return repository.findById(id).get();
+       }catch (NoSuchElementException e){
            return null ;
        }
     }
 
         public List<Customer> getCustomerArrayList() {
-        return customerRepository.findAll();
+        return repository.findAll();
     }
 
     private String hash(String pin) {
