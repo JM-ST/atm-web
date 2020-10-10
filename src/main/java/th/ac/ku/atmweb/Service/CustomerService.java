@@ -38,7 +38,7 @@ public class CustomerService {
        }
     }
 
-        public List<Customer> getCustomerArrayList() {
+    public List<Customer> getCustomerArrayList() {
         return repository.findAll();
     }
 
